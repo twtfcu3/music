@@ -53,6 +53,7 @@ int music_plane::init(const char* ptitle,int px,int py,int pw,int ph,Uint32 pfla
 		rt.y = ph-64;
 		rt.w = 64;
 		rt.h = 64;
+		icon(i,1)->color_key(1,0xff0000);
 		icon(i,1)->blit_surface(NULL,this,&rt);	
 	}
 	icon(update_button_xy)->blit_surface(NULL,_update.killfocus_page(),NULL);
@@ -64,9 +65,8 @@ int music_plane::init(const char* ptitle,int px,int py,int pw,int ph,Uint32 pfla
 	add<music_play_button>(&_play);
 	_list.event(view_event);
 	_update.color_key(1,0xff0000);
-	_list.color_key(1,0x00);
+	//_list.color_key(1,0x00);
 	color_key(1,0x00);
-	color_key(1,0xff0000);
 	return 0;
 }
 int music_plane::sysevent(SDL_Event*e)
