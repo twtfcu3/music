@@ -1,5 +1,6 @@
 ﻿#include <cmath>
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_mixer.h>
 #include "sdlgui/sdlgui.h"
 #include "player_gui/play_button.cpp"
 #include "player_gui/file_item.cpp"
@@ -65,6 +66,7 @@ int frame_event(sdl_frame* obj,SDL_Event*e)
 }
 int main(int argc, char * argv[])
 {
+	Mix_Init(MIX_INIT_MP3);
 	int i;
 	sdlsurface bg;
 	sdl_button* _close;
@@ -82,5 +84,7 @@ int main(int argc, char * argv[])
 	icon(close_button_xy)->blit_surface(NULL,_close,NULL);
 	_close->color_key(1,0xff0000);
 	f.event(frame_event);
-	return f.run();
+	f.run();
+	Mix_Quit();
+	return 0;
 }

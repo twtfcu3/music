@@ -1,5 +1,7 @@
 ﻿#ifndef __music_plane__
 #define __music_plane__
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_Mixer.h>
 #include <iostream>
 #include <string>
 #include <map>
@@ -21,6 +23,8 @@ typedef class music_plane : public GUI<music_plane,sdl_widget>
 		sdl_view _list;
 		sdl_button _update;		
 		music_play_button _play;
+		/* 音乐对象 */
+		Mix_Chunk* music_file;
 }*music_plane_ptr;
 music_plane::music_plane()
 	:
@@ -37,6 +41,7 @@ music_plane::music_plane(const char* ptitle,int px,int py,int pw,int ph,Uint32 p
 int music_plane::init()
 {
 	if(sdl_widget::init())return -1;
+	music_file = NULL;
 	return 0;
 }
 int music_plane::init(const char* ptitle,int px,int py,int pw,int ph,Uint32 pflag)
@@ -80,10 +85,32 @@ int music_plane::sysevent(SDL_Event*e)
 			switch(e->user.code)
 			{
 				case sdlgui_button_click:
-					if(e->user.data1 == &_update)update_list();
+					if(e->user.data1 == &_update)
+					{
+						update_list();
+					}
+					else
+					if(e->user.data1 == &_play)
+					{
+						if(_play.state())
+						{
+							Mix_Pause(-1);
+						}
+						else
+						{
+							Mix_Resume(-1);
+						}
+					}
 					else
 					{
-						cout<<_select_music->music_path<<endl;
+						if(music_file)
+						{
+							Mix_FreeChunk(music_file);	
+						}
+						Mix_OpenAudio(22050,MIX_DEFAULT_FORMAT,2,4096);
+						music_file = Mix_LoadWAV(_select_music->music_path.c_str());
+						Mix_PlayChannel(-1,music_file,0);
+						cout<<_select_music->music_path<<":"<<music_file<<endl;
 					}
 				break;
 			}

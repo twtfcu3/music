@@ -47,6 +47,9 @@ int music_play_button::sysevent(SDL_Event*e)
 {
 	switch(e->type)
 	{
+		case SDL_MOUSEMOTION:
+			cout<<"play motion"<<endl;
+		break;
 		case SDL_MOUSEBUTTONDOWN:
 			state((_state)?0:1);
 		break;
