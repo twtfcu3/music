@@ -44,7 +44,7 @@ int file_plane::init()
 int file_plane::init(const char* ptitle,int px,int py,int pw,int ph,Uint32 pflag)
 {
 	if(sdl_widget::init(ptitle,px,py,pw,ph,pflag))return -1;
-	back.init("",0,0,64,64,1);
+	back.init("",pw-64*2,0,64,64,1);
 	add<back_button>(&back);
 	_file_view.init("",0,64,pw,ph-64,1);
 	_file_view.view.fill_rect(NULL,0xff0000);
@@ -104,7 +104,7 @@ int file_plane::sysevent(SDL_Event*e)
 			}
 		break;
 		case SDL_MOUSEMOTION:
-			_parent->event(e);
+			if(e->motion.y<64)_parent->event(e);
 		break;
 		default:
 		break;

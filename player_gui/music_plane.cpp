@@ -50,7 +50,7 @@ int music_plane::init(const char* ptitle,int px,int py,int pw,int ph,Uint32 pfla
 	int i;
 	if(sdl_widget::init(ptitle,px,py,pw,ph,pflag))return -1;
 	_list.init("",0,64,pw,ph-64*3,1);
-	_update.init("",0,0,64,64,1);
+	_update.init("",pw-64*2,0,64,64,1);
 	_play.init("",0,ph-64,64,64,1);
 	for(i=0;i<8;i++)
 	{
@@ -79,7 +79,15 @@ int music_plane::sysevent(SDL_Event*e)
 	switch(e->type)
 	{
 		case SDL_MOUSEMOTION:
-			_parent->event(e);
+			if(e->motion.state && !capture())
+			{
+				capture(1);
+			}
+			else
+			{
+				if(capture())capture(0);
+			}
+			if(e->motion.y<64)_parent->event(e);
 		break;
 		case SDL_USEREVENT:
 			switch(e->user.code)
